@@ -14,7 +14,7 @@ void* HelloWorld (void *toprint)
     toprint = (char *) toprint;
     printf("%s\n",toprint);
     int *rtnPnt;
-    int irtn = 5;
+    static int irtn = 5;
     rtnPnt = &irtn;
     printf("Maa %d\n",rtnPnt);
     return rtnPnt;
