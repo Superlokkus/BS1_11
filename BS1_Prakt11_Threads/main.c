@@ -7,12 +7,24 @@
 //
 
 #include <stdio.h>
+#include <pthread.h>
+
+void HelloWorld (void)
+{
+    printf("Hello World!\n");
+}
 
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    printf("Hello, World!\n");
+    pthread_t helloworldThread;
+    if (pthread_create(&helloworldThread, NULL, HelloWorld, NULL) != 0) {
+        perror("Creating helloworldThread failed");
+    }
+    
+    if (pthread_join(helloworldThread, NULL) != 0) {
+        perror("Joining helloworldThread failed");
+    }
+    
     return 0;
 }
 
