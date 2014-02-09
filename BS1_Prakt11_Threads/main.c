@@ -13,7 +13,11 @@ void* HelloWorld (void *toprint)
 {
     toprint = (char *) toprint;
     printf("%s\n",toprint);
-    return 0;
+    int *rtnPnt;
+    int irtn = 5;
+    rtnPnt = &irtn;
+    printf("Maa %d\n",rtnPnt);
+    return rtnPnt;
 }
 
 int main(int argc, const char * argv[])
@@ -27,8 +31,8 @@ int main(int argc, const char * argv[])
     if (pthread_join(HelloWorldThread, &HelloWorldReturn) != 0) {
         perror("Joining helloworldThread failed");
     }
-    HelloWorldReturn = (int *) HelloWorldReturn;
-    printf("Thread returned %d\n",HelloWorldReturn);
+    int iHelloWorldReturn = (int) HelloWorldReturn;
+    printf("Thread returned %d\n",iHelloWorldReturn);
     
     return 0;
 }
