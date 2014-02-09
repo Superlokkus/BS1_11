@@ -11,9 +11,9 @@
 
 void* HelloWorld (void *toprint)
 {
-    toprint = (char *) toprint;
-    printf("%s\n",toprint);
-    int *rtnPnt; static int irtn = 5; rtnPnt = &irtn;
+    char *ctoprint = (char *) toprint;
+    printf("%s\n",ctoprint);
+    int *rtnPnt; static int irtn = 0; rtnPnt = &irtn;
     return rtnPnt;
 }
 
