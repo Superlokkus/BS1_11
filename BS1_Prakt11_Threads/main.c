@@ -8,19 +8,23 @@
 
 #include <stdio.h>
 #include <pthread.h>
+#include <string.h>
+#include <stdlib.h>
 
-void* HelloWorld (void *toprint)
+void* printString (void *toprint)
 {
     char *ctoprint = (char *) toprint;
-    printf("%s\n",ctoprint);
-    int *rtnPnt; static int irtn = 0; rtnPnt = &irtn;
-    return rtnPnt;
+    int *rtnPnt; static int irtn;
+    irtn = printf("%s",ctoprint);
+    
+    rtnPnt = &irtn; return rtnPnt;
 }
 
 int main(int argc, const char * argv[])
 {
-    pthread_t HelloWorldThread;
-    if (pthread_create(&HelloWorldThread, NULL, HelloWorld, "Hello World") != 0) {
+    pthread_t HelloWorldThread; char msg[] = "Hello World!\n";
+    
+    if (pthread_create(&HelloWorldThread, NULL, printString, msg) != 0) {
         perror("Creating helloworldThread failed");
     }
     
@@ -29,8 +33,11 @@ int main(int argc, const char * argv[])
         perror("Joining helloworldThread failed");
     }
     int iHelloWorldReturn = *(int*) HelloWorldReturn;
-    printf("Thread returned %d\n",iHelloWorldReturn);
+    if (strlen(msg) != iHelloWorldReturn) {
+        fprintf(stderr, "Something in printing by HelloWorldThread failed\n");
+        return EXIT_FAILURE;
+    }
     
-    return 0;
+    return EXIT_SUCCESS;
 }
 
