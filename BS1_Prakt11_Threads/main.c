@@ -13,12 +13,13 @@
 
 long lnumber;
 
-void hundredMillionDecrement(void)
+void* hundredMillionDecrement(void *redherring)
 {
     int_least32_t i;
     for (i=0; i<100000000; i++) {
         lnumber--;
     }
+    return NULL;
 }
 
 int main(int argc, const char * argv[])
@@ -36,7 +37,9 @@ int main(int argc, const char * argv[])
         lnumber++;
     }
     
-    pthread_cancel(secondThread);
+    if (pthread_join(secondThread, NULL)) {
+        perror("Joining 2nd thread failed");
+    }
     
     printf("Main exiting, global number is %ld\n",lnumber);
     
