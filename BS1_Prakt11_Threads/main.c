@@ -31,7 +31,8 @@ int main(int argc, const char * argv[])
     if (pthread_join(HelloWorldThread, &HelloWorldReturn) != 0) {
         perror("Joining helloworldThread failed");
     }
-    int iHelloWorldReturn = (int) HelloWorldReturn;
+    int *iiHelloWorldReturn = (int*) HelloWorldReturn;
+    int iHelloWorldReturn = *iiHelloWorldReturn;
     printf("Thread returned %d\n",iHelloWorldReturn);
     
     return 0;
