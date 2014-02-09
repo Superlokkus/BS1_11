@@ -9,21 +9,26 @@
 #include <stdio.h>
 #include <pthread.h>
 
-void HelloWorld (void)
+void* HelloWorld (void *toprint)
 {
-    printf("Hello World!\n");
+    toprint = (char *) toprint;
+    printf("%s\n",toprint);
+    return 0;
 }
 
 int main(int argc, const char * argv[])
 {
-    pthread_t helloworldThread;
-    if (pthread_create(&helloworldThread, NULL, HelloWorld, NULL) != 0) {
+    pthread_t HelloWorldThread;
+    if (pthread_create(&HelloWorldThread, NULL, HelloWorld, "Hello World") != 0) {
         perror("Creating helloworldThread failed");
     }
     
-    if (pthread_join(helloworldThread, NULL) != 0) {
+    void *HelloWorldReturn;
+    if (pthread_join(HelloWorldThread, &HelloWorldReturn) != 0) {
         perror("Joining helloworldThread failed");
     }
+    HelloWorldReturn = (int *) HelloWorldReturn;
+    printf("Thread returned %d\n",HelloWorldReturn);
     
     return 0;
 }
