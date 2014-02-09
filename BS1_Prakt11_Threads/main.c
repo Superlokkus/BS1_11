@@ -11,32 +11,35 @@
 #include <string.h>
 #include <stdlib.h>
 
-void* printString (void *toprint)
+void* hundredMillionDecrement(void *toDecrement)
 {
-    char *ctoprint = (char *) toprint;
-    int *rtnPnt; static int irtn;
-    irtn = printf("%s",ctoprint);
-    
-    rtnPnt = &irtn; return rtnPnt;
+    long *itoDecrement = (long*) toDecrement;
+    int_least32_t i;
+    for (i=0; i<100000000; i++) {
+        *itoDecrement = *itoDecrement - 1;
+    }
+    return NULL;
 }
+
+long lnumber;
 
 int main(int argc, const char * argv[])
 {
-    pthread_t HelloWorldThread; char msg[] = "Hello World!\n";
+    printf("Global number initialized with %ld\n",lnumber);
     
-    if (pthread_create(&HelloWorldThread, NULL, printString, msg) != 0) {
-        perror("Creating helloworldThread failed");
-    }
-    
-    void *HelloWorldReturn;
-    if (pthread_join(HelloWorldThread, &HelloWorldReturn) != 0) {
-        perror("Joining helloworldThread failed");
-    }
-    int iHelloWorldReturn = *(int*) HelloWorldReturn;
-    if (strlen(msg) != iHelloWorldReturn) {
-        fprintf(stderr, "Something in printing by HelloWorldThread failed\n");
+    pthread_t secondThread;
+    if (pthread_create(&secondThread, NULL, hundredMillionDecrement, &lnumber)) {
+        perror("Creating 2nd thread failed");
         return EXIT_FAILURE;
     }
+    
+    int_least32_t i;
+    for (i=0; i<100000000; i++) {
+        lnumber++;
+    }
+    
+    
+    printf("Main exiting, global number is %ld\n",lnumber);
     
     return EXIT_SUCCESS;
 }
