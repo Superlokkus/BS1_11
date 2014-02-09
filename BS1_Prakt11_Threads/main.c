@@ -11,24 +11,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-void* hundredMillionDecrement(void *toDecrement)
+long lnumber;
+
+void hundredMillionDecrement(void)
 {
-    long *itoDecrement = (long*) toDecrement;
     int_least32_t i;
     for (i=0; i<100000000; i++) {
-        *itoDecrement = *itoDecrement - 1;
+        lnumber--;
     }
-    return NULL;
 }
-
-long lnumber;
 
 int main(int argc, const char * argv[])
 {
     printf("Global number initialized with %ld\n",lnumber);
     
     pthread_t secondThread;
-    if (pthread_create(&secondThread, NULL, hundredMillionDecrement, &lnumber)) {
+    if (pthread_create(&secondThread, NULL, hundredMillionDecrement, NULL)) {
         perror("Creating 2nd thread failed");
         return EXIT_FAILURE;
     }
@@ -38,6 +36,7 @@ int main(int argc, const char * argv[])
         lnumber++;
     }
     
+    pthread_cancel(secondThread);
     
     printf("Main exiting, global number is %ld\n",lnumber);
     
